@@ -2,17 +2,27 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Welcome!\n")
+	 v := map[string]interface{}{
+	 	"status":"OK",
+	 	"currentTime":time.Now(),
+	 	"api_version" : API_VERSION,
+	 	"app_version" : APP_VERSION,
+	 }
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(v); err != nil {
+		panic(err)
+	}
 }
 
 func TodoIndex(w http.ResponseWriter, r *http.Request) {
